@@ -22,6 +22,8 @@ public class Jammo_Player : MonoBehaviour
     public Rigidbody rig;
     public Animator ani;
     public AudioSource aud;
+    [Header("檢物品位置")]
+    public Rigidbody rigCatch;
 
     public AudioClip soundBark;
 
@@ -31,6 +33,19 @@ public class Jammo_Player : MonoBehaviour
         Run();
         jump();
         Catch();
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.name == "Banana" && ani.GetCurrentAnimatorStateInfo(0).IsName("hit01"))
+        {
+            Physics.IgnoreCollision(other, GetComponent<Collider>());
+            other.GetComponent<HingeJoint>().connectedBody = rigCatch;
+        }
+
+        if (other.name == "location" && ani.GetCurrentAnimatorStateInfo(0).IsName("hit01"))
+        {
+            GameObject.Find("Banana").GetComponent<HingeJoint>().connectedBody = null;
+        }
     }
 
     #region 方法區域
